@@ -67,30 +67,6 @@ const get = async (req,res) => {
     }
 }
 
-
-const getAll = async (req,res) => {
-    try {
-        const response = await userService.getAll();
-        return res.status(200).json({
-            data: response,
-            success:true,
-            message: 'Successfully fetched Users',
-            err: {}
-        })
-        
-    } catch (error) {
-        return res.status(500).json({
-            data: {},
-            success:false,
-            message: 'cannot fetch Users',
-            err: error
-        })
-        
-    }
-}
-
-
-
 const signin = async (req,res) => {
     try {
         const response = await userService.signin(req.body);
@@ -116,7 +92,6 @@ module.exports={
     create,
     destroy,
     get,
-    getAll,
     signin
 }
 
