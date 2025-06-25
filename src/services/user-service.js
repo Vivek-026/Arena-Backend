@@ -1,5 +1,7 @@
 const {UserRepository} = require('../repositories/index');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const {JWT_SECRET_KEY} = require('../config/serverConfig');
 
 class UserService{
 
@@ -68,7 +70,13 @@ class UserService{
                 throw {error: 'Incorrect password'};
             }
 
-            return user;
+            const response = await this.createToken({email:user.email, password:user.password});
+            console.log("response after creating token",response);
+
+            const userObj = user.toObject()
+            userObj.token = response;
+
+            return userObj;
             
         } catch (error) {
             console.log("error in user service");
@@ -80,6 +88,61 @@ class UserService{
 
     async validatePassword(password, encryptedPassword){
         return bcrypt.compare(password, encryptedPassword);
+    }
+
+    async createToken(user){
+
+        try {
+            const response = await jwt.sign(user,JWT_SECRET_KEY,{expiresIn: '24h'});
+            return response;
+            
+        } catch (error) {
+            console.log(error);
+            throw error;
+            
+        }
+
+    }
+
+    async verifyToken(token){
+
+        try {
+
+            const response = await jwt.verify(token,JWT_SECRET_KEY);
+            return response;
+            
+        } catch (error) {
+            console.log('error in user service');
+            throw error;
+            
+        }
+    }
+
+    async isAuthenticated(token){
+
+        try {
+
+            const response = await this.verifyToken(token);
+            console.log(response);
+
+            if(!response){
+                console.log('invalid token');
+                throw({error : 'Invalid token'})
+            }
+            const user = await this.getByEmail(response.email);
+            if(!user){
+                console.log("user not found");
+                throw({error : "user not found"})
+            }
+
+            return response;
+            
+        } catch (error) {
+
+            console.log('error in user service');
+            throw error;
+            
+        }
     }
 }
 

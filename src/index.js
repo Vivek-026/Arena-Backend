@@ -19,12 +19,6 @@ const startServer=()=>{
         console.log("Server started on port", PORT );
         await connect();
 
-
-        
-        
-
-
-
     })
 
 }
