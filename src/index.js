@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 const {PORT} = require('./config/serverConfig');
 const connect = require('./config/database');
@@ -9,6 +10,10 @@ const apiRoutes = require('./routes/index')
 const app = express();
 
 const startServer=()=>{
+    app.use(cors({
+  origin: "http://localhost:5173", 
+  credentials: true 
+}));
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:true}));

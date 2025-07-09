@@ -12,8 +12,11 @@ class UserService{
     async create(data){
         try {
             const user = await this.userRepository.create(data);
-            return user;
-            
+            const token = await this.createToken({email:user.email,password:user.password})
+            const userObj = user.toObject()
+            userObj.token = token;
+            return userObj;   
+
         } catch (error) {
             console.log("error in user service");
             throw error;
@@ -24,7 +27,10 @@ class UserService{
     async destroy(id){
         try {
             const user = await this.userRepository.destroy(id);
-            return user;
+
+            
+
+            
             
         } catch (error) {
             console.log("error in user service");
@@ -60,7 +66,9 @@ class UserService{
 
     async signin(data){
         try {
+            console.log('data',data.email);
             const user = await this.getByEmail(data.email);
+            console.log(user);
             const encryptedPassword = user.password;
             const password = data.password;
             const result = await this.validatePassword(password, encryptedPassword)
@@ -79,7 +87,7 @@ class UserService{
             return userObj;
             
         } catch (error) {
-            console.log("error in user service");
+            console.log(error);
             throw error;
             
             
@@ -123,8 +131,7 @@ class UserService{
         try {
 
             const response = await this.verifyToken(token);
-            console.log(response);
-
+  
             if(!response){
                 console.log('invalid token');
                 throw({error : 'Invalid token'})
@@ -143,6 +150,11 @@ class UserService{
             throw error;
             
         }
+    }
+
+    async isOwner(id){
+        const response = await this.userRepository.isOwner(id);
+        return response;
     }
 }
 

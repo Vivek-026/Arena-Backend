@@ -4,7 +4,10 @@ class UserRepository{
 
     async create(data){
         try {
+            console.log("data," ,data)
+            
             const user = await User.create(data);
+            console.log("user," ,user)
             return user;
             
         } catch (error) {
@@ -51,6 +54,14 @@ class UserRepository{
             
             
         }
+    }
+
+    async isOwner(id){
+        const response = await this.get(id);
+        console.log(response);
+        return response;
+        
+
     }
 }
 
