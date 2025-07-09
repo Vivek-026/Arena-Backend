@@ -83,9 +83,7 @@ Arena Team
             
         } catch (error) {
             console.log("error in booking service");
-            throw error;
-            
-            
+            throw error;   
         }
     }
 
