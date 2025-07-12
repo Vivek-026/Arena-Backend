@@ -15,13 +15,11 @@ router.get('/users/:id', UserController.get );
 router.post('/signin', UserController.signin );
 router.post('/isAuthenticated', UserController.isAuthenticated );
 
-
 router.post('/turf', TurfController.create);
 router.delete('/turf/:id', TurfController.destroy);
 router.get('/turf/:id', TurfController.get);
 router.get('/turf', TurfController.getAll);
 router.patch('/turf/:id', TurfController.update);
-
 
 router.post('/bookings', BookingController.create);
 router.patch('/bookings/:id', BookingController.cancel);
