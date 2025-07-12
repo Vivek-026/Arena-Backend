@@ -11,7 +11,7 @@ const app = express();
 
 const startServer=()=>{
     app.use(cors({
-  origin: "http://localhost:5173", 
+  origin: "https://arena-frontend-0bn5.onrender.com", 
   credentials: true 
 }));
 
